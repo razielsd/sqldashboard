@@ -1,0 +1,36 @@
+{
+  "refreshTimeout": "1m",
+  "defaultConnection": {
+    "host": "localhost",
+    "port": "5432",
+    "user": "your-username",
+    "password": "you-password",
+    "database": "your-database"
+  },
+  "areas": [
+    {
+      "title": "Database Overview",
+      "refreshTimeout": "30s",
+      "tabs": [
+        {
+          "title": "Table Stats",
+          "query": "SELECT 'customers' AS table_name, COUNT(*) AS record_count, COALESCE(MAX(id), 0) AS max_id FROM customers UNION ALL SELECT 'vms', COUNT(*), COALESCE(MAX(id), 0) FROM vms UNION ALL SELECT 'vm_consume', COUNT(*), COALESCE(MAX(id), 0) FROM vm_consume UNION ALL SELECT 'vm_public_keys', COUNT(*), COALESCE(MAX(id), 0) FROM vm_public_keys UNION ALL SELECT 'dlq_message', COUNT(*), COALESCE(MAX(id), 0) FROM dlq_message UNION ALL SELECT 'dlq:' || type, COUNT(*), 0 FROM dlq_message GROUP BY type ORDER BY table_name;",
+          "refreshTimeout": "1m"
+        }
+      ]
+    },
+    {
+      "title": "Detailed Views",
+      "tabs": [
+        {
+          "title": "Customers",
+          "query": "SELECT * FROM customers LIMIT 100"
+        },
+        {
+          "title": "VMs",
+          "query": "SELECT * FROM vms LIMIT 100"
+        }
+      ]
+    }
+  ]
+}

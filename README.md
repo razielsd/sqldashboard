@@ -1,4 +1,5 @@
 # SQL Dashboard
+**Note:** This is experimental software provided "as-is".
 
 A cross-platform GUI application for PostgreSQL monitoring with customizable queries and real-time data visualization.
 
