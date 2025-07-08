@@ -6,6 +6,9 @@ A cross-platform GUI application for PostgreSQL monitoring with customizable que
 ## Why This Exists?
 Tired of running the same database queries manually? SQLDashboard automates your routine data checks, giving you instant visibility without repetitive work.
 
+## How It Works
+We take multiple SQL queries to the database and store them in a config. Based on this config, the application is built, allowing us to instantly view all the results.
+
 ## Features
 
 - 🖥️ Supports Windows, macOS and Linux
