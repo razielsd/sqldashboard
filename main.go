@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -13,7 +12,6 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
-	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	_ "github.com/lib/pq"
@@ -63,7 +61,7 @@ func main() {
 	}
 
 	fyneApp := app.New()
-	window := fyneApp.NewWindow("SQL Monitor")
+	window := fyneApp.NewWindow("SQL Dashboard")
 	window.Resize(fyne.NewSize(1200, 800))
 
 	tabs := container.NewAppTabs()
@@ -71,7 +69,6 @@ func main() {
 
 	db, err := connectDB(config.DefaultConnection)
 	if err != nil {
-		showCriticalError(fyneApp, window, "Error connecting to database")
 		log.Fatal("Database connection error:", err)
 	}
 	defer db.Close()
@@ -186,17 +183,6 @@ func main() {
 	fyneApp.Run()
 }
 
-func showCriticalError(app fyne.App, parent fyne.Window, message string) {
-	dialog.ShowError(
-		errors.New(message),
-		parent,
-	)
-
-	parent.SetOnClosed(func() {
-		app.Quit()
-	})
-}
-
 func copySelectedCell(window fyne.Window, tabs *container.AppTabs, activeTabs []*TabRuntime) {
 	if tabs.Selected() != nil {
 		if areaTabs, ok := tabs.Selected().Content.(*container.AppTabs); ok {
@@ -240,7 +226,7 @@ func loadConfig(filename string) (*SqlMonitorApp, error) {
 }
 
 func connectDB(conn *Connection) (*sql.DB, error) {
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable  connect_timeout=15",
 		conn.Host, conn.Port, conn.User, conn.Password, conn.Database)
 	return sql.Open("postgres", psqlInfo)
 }
